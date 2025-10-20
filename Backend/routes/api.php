@@ -9,3 +9,5 @@ Route::get('/id/{id}', [TaskController::class, 'show']);
 Route::get('/completed', [TaskController::class, 'completed']);
 Route::get('/overload', [TaskController::class, 'overload']);
 Route::get('/lingering', [TaskController::class, 'lingering']);
+
+Route::post('/create', [TaskController::class, 'store']);

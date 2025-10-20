@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+use function Laravel\Prompts\error;
 
 class TaskController extends Controller
 {
@@ -21,6 +24,7 @@ class TaskController extends Controller
      */
     public function create()
     {
+        
         //
     }
 
@@ -29,6 +33,41 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string',
+            'description' => 'string',
+            'assigned_to' => 'string',
+            'is_completed' => 'boolean',
+        ], [
+            'title.required' => 'Title is required',
+            'is_completed.boolean' => 'Is Completed must be true or false',
+            'description.string' => 'Description must be a string',
+            'title.string' => 'Title must be a string',
+            'assigned_to.string' => 'Assigned To must be a string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Validation errors',
+                    'errors' => $validator->errors()->toArray()],
+                422
+            );
+        }
+
+        $newRecord = new task();
+        $newRecord->title = $request->title;
+        $newRecord->description = $request->description;
+        $newRecord->assigned_to = $request->assigned_to;
+        $newRecord->is_completed = $request->is_completed ?? false;
+        $newRecord->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Task created successfully',
+            'data' => $newRecord
+        ], 201);
         //
     }
 
