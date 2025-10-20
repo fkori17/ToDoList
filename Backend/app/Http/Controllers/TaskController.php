@@ -12,7 +12,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        $response = task::all();
+        return response()->json($response);
     }
 
     /**
@@ -34,11 +35,58 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(task $task)
+    public function show(string $id)
     {
+        $response = task::find($id);
+        if (empty($response)) {
+            return response()->json(["message"=> "ID not found"],404);
+        } else {
+            return response()->json($response);
+        }
         //
     }
 
+    public function overload()
+    {
+        $response = task::
+        selectRaw('assigned_to, COUNT(title) as task_count')
+        ->groupBy('assigned_to')
+        ->having('task_count', '>', 1)
+        ->get();
+        if (empty($response)) {
+            return response()->json(["message"=> "No overloaded workers found"],404);
+        } else {
+            return response()->json($response);
+        }
+        //
+    }
+
+    public function lingering()
+    {
+        $response = task::
+        where('is_completed', 0)
+        ->where('created_at', '<', now()->subMonths(4))
+        ->get();
+        if (empty($response)) {
+            return response()->json(["message"=> "No lingering tasks found"],404);
+        } else {
+            return response()->json($response);
+        }
+        //
+    }
+
+    public function completed()
+    {
+        $response = task::
+        where('is_completed', 1)
+        ->get();
+        if (empty($response)) {
+            return response()->json(["message"=> "No completed tasks found"],404);
+        } else {
+            return response()->json($response);
+        }
+        //
+    }
     /**
      * Show the form for editing the specified resource.
      */
