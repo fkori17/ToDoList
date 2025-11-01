@@ -1,0 +1,48 @@
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+}
+
+main {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+article:first-of-type {
+  gap: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+@media screen and (max-width: 1300px) {
+  article:first-of-type {
+    flex-direction: column;
+  }
+}
+table {
+  border-radius: 20px;
+  padding: 10px;
+  background-color: rgb(32, 32, 32);
+  td {
+    padding: 5px;
+  }
+  tr:not(:last-child) td {
+    border-bottom: 1px solid white;
+  }
+}
+
+.red {
+  background-color: red;
+  font-weight: bolder;
+}
+.green {
+  background-color: green;
+  font-weight: bolder;
+}
