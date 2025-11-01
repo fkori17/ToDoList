@@ -6,15 +6,28 @@ import LingeringLine from "./components/LingeringLine.jsx";
 import Line from "./components/Line.jsx";
 import "./App.css";
 function App() {
-  const [data, sethata] = useState(null);
+  const [data0, sethata0] = useState(null);
+  const [data1, sethata1] = useState(null);
+  const [data2, sethata2] = useState(null);
+  const [data3, sethata3] = useState(null);
+
+  function fetchData() {
+    fetch("http://127.0.0.1:8000/api/all")
+      .then((response) => response.json())
+      .then((json) => sethata0(json))
+      .catch((error) => console.error("Error fetching data:", error));
+  }
+  fetch("http://127.0.0.1:8000/api/completed")
+    .then((response) => response.json())
+    .then((json) => sethata1(json))
+    .catch((error) => console.error("Error fetching data:", error));
+  fetch("http://127.0.0.1:8000/api/lingering")
+    .then((response) => response.json())
+    .then((json) => sethata2(json))
+    .catch((error) => console.error("Error fetching data:", error));
 
   function writeLine() {
-    fetch("http://127.0.0.1:8000/api")
-      .then((response) => response.json())
-      .then((json) => sethata(json))
-      .catch((error) => console.error("Error fetching data:", error));
-
-    if (!data) {
+    if (!data0) {
       return (
         <>
           <p>Loading...</p>
@@ -23,7 +36,7 @@ function App() {
     }
     return (
       <>
-        {data.map((row) => (
+        {data0.map((row) => (
           <Line
             key={row.id}
             id={row.id}
@@ -40,11 +53,7 @@ function App() {
   }
 
   function writeCompleted() {
-    fetch("http://127.0.0.1:8000/api/completed")
-      .then((response) => response.json())
-      .then((json) => sethata(json))
-      .catch((error) => console.error("Error fetching data:", error));
-    if (!data) {
+    if (!data1) {
       return (
         <>
           <p>Loading...</p>
@@ -53,7 +62,7 @@ function App() {
     }
     return (
       <>
-        {data.map((row) => (
+        {data1.map((row) => (
           <CompletedLine
             key={row.id}
             id={row.id}
@@ -68,11 +77,7 @@ function App() {
   }
 
   function writeLingering() {
-    fetch("http://127.0.0.1:8000/api/lingering")
-      .then((response) => response.json())
-      .then((json) => sethata(json))
-      .catch((error) => console.error("Error fetching data:", error));
-    if (!data) {
+    if (!data2) {
       return (
         <>
           <p>Loading...</p>
@@ -81,7 +86,7 @@ function App() {
     }
     return (
       <>
-        {data.map((row) => (
+        {data2.map((row) => (
           <LingeringLine
             key={row.id}
             id={row.id}
@@ -97,6 +102,7 @@ function App() {
   }
   return (
     <>
+      {fetchData()}
       <h1>To-Do List</h1>
       <main>
         <article>
