@@ -4,7 +4,7 @@ const Line = (props) => {
       <td>{props.id}</td>
       <td>{props.title}</td>
       <td>{props.description}</td>
-      <td class={props.is_completed ? "green" : "red"}>
+      <td className={props.is_completed ? "green" : "red"}>
         {props.is_completed ? "Kész" : "Nincs kész"}
       </td>
       <td>{props.assigned_to}</td>

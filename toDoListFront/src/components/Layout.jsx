@@ -1,4 +1,9 @@
+import "./Layout.css";
 const Layout = ({ children }) => {
-  return <></>;
+  return (
+    <>
+      <div>{children}</div>
+    </>
+  );
 };
 export default Layout;

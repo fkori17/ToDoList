@@ -5,6 +5,7 @@ import CompletedLine from "./components/CompletedLine.jsx";
 import LingeringLine from "./components/LingeringLine.jsx";
 import OverloadLine from "./components/OverloadLine.jsx";
 import Line from "./components/Line.jsx";
+import Layout from "./components/Layout.jsx";
 import "./App.css";
 function App() {
   const [data_all, setData_All] = useState(null);
@@ -17,26 +18,26 @@ function App() {
       .then((response) => response.json())
       .then((json) => setData_All(json))
       .catch((error) => console.error("Error fetching data:", error));
+    fetch("http://127.0.0.1:8000/api/completed")
+      .then((response) => response.json())
+      .then((json) => sethata_Completed(json))
+      .catch((error) => console.error("Error fetching data:", error));
+    fetch("http://127.0.0.1:8000/api/lingering")
+      .then((response) => response.json())
+      .then((json) => sethata_Lingering(json))
+      .catch((error) => console.error("Error fetching data:", error));
+    fetch("http://127.0.0.1:8000/api/overload")
+      .then((response) => response.json())
+      .then((json) => sethata_Overload(json))
+      .catch((error) => console.error("Error fetching data:", error));
   }
-  fetch("http://127.0.0.1:8000/api/completed")
-    .then((response) => response.json())
-    .then((json) => sethata_Completed(json))
-    .catch((error) => console.error("Error fetching data:", error));
-  fetch("http://127.0.0.1:8000/api/lingering")
-    .then((response) => response.json())
-    .then((json) => sethata_Lingering(json))
-    .catch((error) => console.error("Error fetching data:", error));
-  fetch("http://127.0.0.1:8000/api/overload")
-    .then((response) => response.json())
-    .then((json) => sethata_Overload(json))
-    .catch((error) => console.error("Error fetching data:", error));
 
   function writeLine() {
     if (!data_all) {
       return (
-        <>
-          <p>Loading...</p>
-        </>
+        <tr>
+          <td colSpan={7}>Loading...</td>
+        </tr>
       );
     }
     return (
@@ -60,9 +61,9 @@ function App() {
   function writeCompleted() {
     if (!data_Completed) {
       return (
-        <>
-          <p>Loading...</p>
-        </>
+        <tr>
+          <td colSpan={5}>Loading...</td>
+        </tr>
       );
     }
     return (
@@ -84,9 +85,9 @@ function App() {
   function writeLingering() {
     if (!data_Lingering) {
       return (
-        <>
-          <p>Loading...</p>
-        </>
+        <tr>
+          <td colSpan={6}>Loading...</td>
+        </tr>
       );
     }
     return (
@@ -109,9 +110,9 @@ function App() {
   function writeOverload() {
     if (!data_Overload) {
       return (
-        <>
-          <p>Loading...</p>
-        </>
+        <tr>
+          <td colSpan={2}>Loading...</td>
+        </tr>
       );
     }
     return (
@@ -130,57 +131,68 @@ function App() {
   return (
     <>
       {fetchData()}
-      <h1>To-Do List</h1>
+      <Layout>
+        <h1>To-Do</h1>
+        <h1>List</h1>
+      </Layout>
       <main>
         <article>
           <h3>Elhanyagolt feladatok</h3>
           <table>
-            <tr>
-              <th>ID</th>
-              <th>Feladat</th>
-              <th>Részletek</th>
-              <th>Felelős</th>
-              <th>Létrehozva</th>
-            </tr>
-            {writeLingering()}
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Feladat</th>
+                <th>Részletek</th>
+                <th>Felelős</th>
+                <th>Létrehozva</th>
+              </tr>
+            </thead>
+            <tbody>{writeLingering()}</tbody>
           </table>
         </article>
         <article>
           <h3>Túlterhelt dolgozók</h3>
           <table>
-            <tr>
-              <th>Felelős</th>
-              <th>Feladatok száma</th>
-            </tr>
-            {writeOverload()}
+            <thead>
+              <tr>
+                <th>Felelős</th>
+                <th>Feladatok száma</th>
+              </tr>
+            </thead>
+            <tbody>{writeOverload()}</tbody>
           </table>
         </article>
         <article>
           <h3>Teljesített feladatok</h3>
           <table>
-            <tr>
-              <th>ID</th>
-              <th>Feladat</th>
-              <th>Részletek</th>
-              <th>Felelős</th>
-              <th>Létrehozva</th>
-            </tr>
-            {writeCompleted()}
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Feladat</th>
+                <th>Részletek</th>
+                <th>Felelős</th>
+                <th>Létrehozva</th>
+              </tr>
+            </thead>
+            <tbody>{writeCompleted()}</tbody>
           </table>
         </article>
         <article>
           <h3>Összes feladat</h3>
           <table>
-            <tr>
-              <th>ID</th>
-              <th>Feladat</th>
-              <th>Részletek</th>
-              <th>Állapot</th>
-              <th>Felelős</th>
-              <th>Létrehozva</th>
-              <th>Frissítve</th>
-            </tr>
-            {writeLine()}
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Feladat</th>
+                <th>Részletek</th>
+                <th>Állapot</th>
+                <th>Felelős</th>
+                <th>Létrehozva</th>
+                <th>Frissítve</th>
+              </tr>
+            </thead>
+            <tbody>{writeLine()}</tbody>
           </table>
         </article>
       </main>
