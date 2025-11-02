@@ -6,24 +6,23 @@
 }
 
 main {
-  display: flex;
-  gap: 20px;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   justify-content: center;
-  align-items: center;
+  align-items: start;
   
 }
 
-article:first-of-type {
-  gap: 20px;
+article {
   padding: 20px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
-@media screen and (max-width: 1300px) {
-  article:first-of-type {
-    flex-direction: column;
+@media screen and (max-width: 1300px) { 
+  main {
+    grid-template-columns: 1fr;
+    
   }
 }
 table {

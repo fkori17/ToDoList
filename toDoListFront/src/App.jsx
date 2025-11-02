@@ -3,31 +3,36 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import CompletedLine from "./components/CompletedLine.jsx";
 import LingeringLine from "./components/LingeringLine.jsx";
+import OverloadLine from "./components/OverloadLine.jsx";
 import Line from "./components/Line.jsx";
 import "./App.css";
 function App() {
-  const [data0, sethata0] = useState(null);
-  const [data1, sethata1] = useState(null);
-  const [data2, sethata2] = useState(null);
-  const [data3, sethata3] = useState(null);
+  const [data_all, setData_All] = useState(null);
+  const [data_Completed, sethata_Completed] = useState(null);
+  const [data_Lingering, sethata_Lingering] = useState(null);
+  const [data_Overload, sethata_Overload] = useState(null);
 
   function fetchData() {
     fetch("http://127.0.0.1:8000/api/all")
       .then((response) => response.json())
-      .then((json) => sethata0(json))
+      .then((json) => setData_All(json))
       .catch((error) => console.error("Error fetching data:", error));
   }
   fetch("http://127.0.0.1:8000/api/completed")
     .then((response) => response.json())
-    .then((json) => sethata1(json))
+    .then((json) => sethata_Completed(json))
     .catch((error) => console.error("Error fetching data:", error));
   fetch("http://127.0.0.1:8000/api/lingering")
     .then((response) => response.json())
-    .then((json) => sethata2(json))
+    .then((json) => sethata_Lingering(json))
+    .catch((error) => console.error("Error fetching data:", error));
+  fetch("http://127.0.0.1:8000/api/overload")
+    .then((response) => response.json())
+    .then((json) => sethata_Overload(json))
     .catch((error) => console.error("Error fetching data:", error));
 
   function writeLine() {
-    if (!data0) {
+    if (!data_all) {
       return (
         <>
           <p>Loading...</p>
@@ -36,7 +41,7 @@ function App() {
     }
     return (
       <>
-        {data0.map((row) => (
+        {data_all.map((row) => (
           <Line
             key={row.id}
             id={row.id}
@@ -53,7 +58,7 @@ function App() {
   }
 
   function writeCompleted() {
-    if (!data1) {
+    if (!data_Completed) {
       return (
         <>
           <p>Loading...</p>
@@ -62,7 +67,7 @@ function App() {
     }
     return (
       <>
-        {data1.map((row) => (
+        {data_Completed.map((row) => (
           <CompletedLine
             key={row.id}
             id={row.id}
@@ -77,7 +82,7 @@ function App() {
   }
 
   function writeLingering() {
-    if (!data2) {
+    if (!data_Lingering) {
       return (
         <>
           <p>Loading...</p>
@@ -86,7 +91,7 @@ function App() {
     }
     return (
       <>
-        {data2.map((row) => (
+        {data_Lingering.map((row) => (
           <LingeringLine
             key={row.id}
             id={row.id}
@@ -100,38 +105,68 @@ function App() {
       </>
     );
   }
+
+  function writeOverload() {
+    if (!data_Overload) {
+      return (
+        <>
+          <p>Loading...</p>
+        </>
+      );
+    }
+    return (
+      <>
+        {data_Overload.map((row) => (
+          <OverloadLine
+            key={row.id}
+            assigned_to={row.assigned_to}
+            task_count={row.task_count}
+          />
+        ))}
+      </>
+    );
+  }
+
   return (
     <>
       {fetchData()}
       <h1>To-Do List</h1>
       <main>
         <article>
-          <aside>
-            <h3>Fennmaradt feladatok</h3>
-            <table>
-              <tr>
-                <th>ID</th>
-                <th>Feladat</th>
-                <th>Részletek</th>
-                <th>Felelős</th>
-                <th>Létrehozva</th>
-              </tr>
-              {writeLingering()}
-            </table>
-          </aside>
-          <aside>
-            <h3>Teljesített feladatok</h3>
-            <table>
-              <tr>
-                <th>ID</th>
-                <th>Feladat</th>
-                <th>Részletek</th>
-                <th>Felelős</th>
-                <th>Létrehozva</th>
-              </tr>
-              {writeCompleted()}
-            </table>
-          </aside>
+          <h3>Elhanyagolt feladatok</h3>
+          <table>
+            <tr>
+              <th>ID</th>
+              <th>Feladat</th>
+              <th>Részletek</th>
+              <th>Felelős</th>
+              <th>Létrehozva</th>
+            </tr>
+            {writeLingering()}
+          </table>
+        </article>
+        <article>
+          <h3>Túlterhelt dolgozók</h3>
+          <table>
+            <tr>
+              <th>Felelős</th>
+              <th>Feladatok száma</th>
+            </tr>
+            {writeOverload()}
+          </table>
+        </article>
+        <article>
+          <h3>Teljesített feladatok</h3>
+          <table>
+            <tr>
+              <th>ID</th>
+              <th>Feladat</th>
+              <th>Részletek</th>
+              <th>Felelős</th>
+              <th>Létrehozva</th>
+            </tr>
+            {writeCompleted()}
+          </table>
         </article>
         <article>
           <h3>Összes feladat</h3>
